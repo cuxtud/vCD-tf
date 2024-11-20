@@ -7,7 +7,7 @@ resource "vcd_org" "my-org" {
   delete_force     = true
   deployed_vm_quota = 10
   stored_vm_quota = 10
-#   list_of_vdcs = ["my-vdc"]
+  list_of_vdcs = ["my-vdc"]
 
   vapp_lease {
     maximum_runtime_lease_in_sec          = 3600 # 1 hour
@@ -32,8 +32,8 @@ resource "vcd_org_vdc" "my_vdc" {
   org  = vcd_org.my-org.name
 
   allocation_model = "AllocationVApp"
-  network_pool_name = "anish-network-pool"
-  provider_vdc_name = "anish-provider-vdc"
+  network_pool_name = var.network_pool_name
+  provider_vdc_name = var.provider_vdc_name
 
   compute_capacity {
     cpu {
@@ -48,7 +48,7 @@ resource "vcd_org_vdc" "my_vdc" {
   }
 
   storage_profile {
-    name    = "anish-storage-profile"
+    name    = var.storage_profile_name
     enabled = true
     limit   = 10240
     default = true
