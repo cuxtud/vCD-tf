@@ -14,12 +14,27 @@ variable "vcd_password" {
   sensitive   = true
 }
 
-variable "orgname" {
-  type = string
-  description = "accept org name from catalog"
+# variable "orgname" {
+#   type = string
+#   description = "accept org name from catalog"
+# }
+
+# variable "vdc_name" {
+#   type = string
+#   description = "<%=customOptions.vDC_name%>"
+# }
+
+variable "provider_vdc_name" {
+  description = "Name of the provider VDC"
+  type        = string
 }
 
-variable "vdc_name" {
-  type = string
-  description = "<%=customOptions.vDC_name%>"
+variable "network_pool_name" {
+  description = "Name of the network pool"
+  type        = string
+}
+
+variable "storage_profile_name" {
+  description = "Name of the storage profile"
+  type        = string
 }
