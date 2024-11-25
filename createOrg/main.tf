@@ -7,7 +7,7 @@ resource "vcd_org" "my-org" {
   delete_force     = true
   deployed_vm_quota = 10
   stored_vm_quota = 10
-  list_of_vdcs = ["my-vdc"]
+  #list_of_vdcs = ["my-vdc"]
 
   vapp_lease {
     maximum_runtime_lease_in_sec          = 3600 # 1 hour
