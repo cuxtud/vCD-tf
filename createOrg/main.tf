@@ -1,7 +1,7 @@
 resource "vcd_org" "my-org" {
-  name             = "anish-org"
-  full_name        = "Anish organization"
-  description      = "Anish Test org"
+  name             = var.org_name
+  full_name        = var.org_full_name
+  description      = var.org_description
   is_enabled       = true
   delete_recursive = true
   delete_force     = true
@@ -24,11 +24,19 @@ resource "vcd_org" "my-org" {
     invalid_logins_before_lockout = 10
     lockout_interval_minutes      = 60
   }
+
+# Disable the org before destroying it
+  lifecycle {
+    create_before_destroy = true
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "terraform apply -target=vcd_org.my-org -var='org_enabled=false'"
+  }
 }
 
-
 resource "vcd_org_vdc" "my_vdc" {
-  name = "anish-vdc"
+  name = var.vdc_name
   org  = vcd_org.my-org.name
 
   allocation_model = "AllocationVApp"

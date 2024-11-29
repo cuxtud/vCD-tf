@@ -14,15 +14,10 @@ variable "vcd_password" {
   sensitive   = true
 }
 
-# variable "orgname" {
-#   type = string
-#   description = "accept org name from catalog"
-# }
-
-# variable "vdc_name" {
-#   type = string
-#   description = "<%=customOptions.vDC_name%>"
-# }
+variable "vdc_name" {
+  type = string
+  description = "vDC name passed from the service catalog"
+}
 
 variable "provider_vdc_name" {
   description = "Name of the provider VDC"
@@ -36,5 +31,20 @@ variable "network_pool_name" {
 
 variable "storage_profile_name" {
   description = "Name of the storage profile"
+  type        = string
+}
+
+variable "org_name" {
+  description = "Name of the organization passed from service catalog"
+  type        = string
+}
+
+variable "org_full_name" {
+  description = "Full name of the organization passed from service catalog"
+  type        = string
+}
+
+variable "org_description" {
+  description = "Description of the organization passed from service catalog"
   type        = string
 }
