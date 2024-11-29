@@ -16,7 +16,7 @@ class MorpheusTenantManager:
             "Accept": "application/json",
             "Authorization": f"Bearer {self.bearer_token}"
         }
-        self.user_password = self._generate_password()  # Generate password on init
+        self.user_password = self._generate_password()  
 
     def _generate_password(self, length=12):
         """Generate a secure random password"""
@@ -57,7 +57,7 @@ class MorpheusTenantManager:
         print("Creating subtenant user")
         url = f"https://{self.host}/api/accounts/{tenant_id}/users"
         print("Url : " + url)
-        print(f"Generated password: {self.user_password}")  # Optional: for debugging
+        print(f"Generated password: {self.user_password}") 
         b = {
             "user": {
                 "username": "testuser",
@@ -92,7 +92,7 @@ class MorpheusTenantManager:
             "Accept": "application/json",
             "Authorization": f"Bearer {access_token}"
         }
-        body = json.dumps({"value": self.user_password})  # Store the user password instead of access token
+        body = json.dumps({"value": self.user_password})  
         response = requests.put(url, headers=headers, verify=False)
         return response.json()
 
@@ -142,19 +142,10 @@ class Main:
         
     def execute(self):
         try:
-            # Create tenant and get ID
             tenant_id = self.tenant_manager.create_tenant()
-            
-            # Create subtenant admin user
             self.tenant_manager.create_subtenant_admin_user(tenant_id)
-            
-            # Create cypher with user password
             self.tenant_manager.create_cypher(self.tenant_manager.bearer_token)
-            
-            # Get access token
             access_token = self.tenant_manager.get_access_token(tenant_id)
-            
-            # Handle groups
             self.group_manager.delete_existing_groups(access_token)
             self.group_manager.create_group(access_token, self.group_name)
             
