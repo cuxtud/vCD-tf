@@ -25,7 +25,7 @@ resource "vcd_org" "my-org" {
     lockout_interval_minutes      = 60
   }
 
-# Disable the org before destroying it
+# Disable the org before destroying it else it fails on destroy.
   lifecycle {
     create_before_destroy = true
   }
@@ -66,10 +66,4 @@ resource "vcd_org_vdc" "my_vdc" {
   vm_quota      = 10
   enabled       = true
 }
-# data "vcd_org" "my-org" {
-#   name = vcd_org.my-org.name
-# }
-
-# output "full_name" {
-#   value = data.vcd_org.my-org.full_name
-# }
+# Need to check if any outputs need to be added
