@@ -5,7 +5,7 @@ resource "vcd_ip_space" "space1" {
   org_id      = vcd_org.my-org.id
 
   internal_scope = ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"]
-  external_scope = ["0.0.0.0/0"] 
+  external_scope = "0.0.0.0/0"
   route_advertisement_enabled = false
   default_firewall_rule_creation_enabled = true
   default_snat_rule_creation_enabled     = true
