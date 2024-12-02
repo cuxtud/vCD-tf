@@ -12,7 +12,7 @@ This Terraform configuration creates and manages a VMware Cloud Director (VCD) o
 ## Resources Created
 
 ### Organization (vcd_org)
-- Name: anish-org
+- Name: Accepted as input in the service catalog
 - Configured with:
   - VM quotas
   - vApp lease settings
@@ -20,7 +20,7 @@ This Terraform configuration creates and manages a VMware Cloud Director (VCD) o
   - Template lease settings
 
 ### Virtual Data Center (vcd_org_vdc)
-- Name: anish-vdc
+- Name: Accepted as input in the service catalog
 - Allocation Model: AllocationVApp
 - Configured with:
   - Compute capacity (CPU and Memory)
