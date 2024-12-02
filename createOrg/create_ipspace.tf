@@ -20,14 +20,14 @@ resource "vcd_ip_space" "space1" {
     }
   }
 
-  ip_prefix {
-    default_quota = -1 
-    prefix {
-      first_ip      = "192.168.101.0"
-      prefix_length = 26
-      prefix_count  = 50
-    }
-  }
+#   ip_prefix {
+#     default_quota = -1 
+#     prefix {
+#       first_ip      = "192.168.101.0"
+#       prefix_length = 26
+#       prefix_count  = 50
+#     }
+#   }
 
   ip_prefix {
     default_quota = -1 
@@ -74,14 +74,14 @@ resource "vcd_ip_space" "space1" {
     }
   }
 
-  ip_prefix {
-    default_quota = -1 
-    prefix {
-      first_ip      = "192.168.0.0"
-      prefix_length = 24
-      prefix_count  = 50
-    }
-  }
+#   ip_prefix {
+#     default_quota = -1 
+#     prefix {
+#       first_ip      = "192.168.0.0"
+#       prefix_length = 24
+#       prefix_count  = 50
+#     }
+#   }
 
   ip_prefix {
     default_quota = -1 
