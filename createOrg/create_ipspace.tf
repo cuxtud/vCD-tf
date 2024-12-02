@@ -1,6 +1,6 @@
 resource "vcd_ip_space" "space1" {
   name        = "IPSpace-Private_${var.org_name}"
-  description = "Private IP Space create for org ${var.org_name}"
+  description = "Private IP Space created for org ${var.org_name}"
   type        = "PRIVATE"
   org_id      = vcd_org.my-org.id
 
@@ -32,7 +32,7 @@ resource "vcd_ip_space" "space1" {
   ip_prefix {
     default_quota = -1 
     prefix {
-      first_ip      = "172.18.1.0"
+      first_ip      = "172.18.0.0"
       prefix_length = 26
       prefix_count  = 250
     }
