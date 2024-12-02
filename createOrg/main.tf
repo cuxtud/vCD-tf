@@ -39,6 +39,8 @@ resource "vcd_org_vdc" "my_vdc" {
   name = var.vdc_name
   org  = vcd_org.my-org.name
 
+  depends_on = [vcd_org.my-org]
+  
   allocation_model = "AllocationVApp"
   network_pool_name = var.network_pool_name
   provider_vdc_name = var.provider_vdc_name
