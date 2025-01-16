@@ -48,3 +48,30 @@ variable "org_description" {
   description = "Description of the organization passed from service catalog"
   type        = string
 }
+
+variable "vdc_enabled" {
+  description = "Flag to enable or disable the VDC"
+  type        = bool
+  default     = true
+}
+
+variable "edge_cluster_name" {
+  description = "Name of the edge cluster to use for creating the nsxt edge t1 gateway"
+  type = string
+}
+
+variable "provider_gateway_name" {
+  description = "Name of the proivider gateway that would be connected to the T1 Edge Gateway"
+  type = string
+}
+
+variable "org_admin_password" {
+  description = "Password for the Org admin user"
+  type = string
+  sensitive = true
+}
+
+variable "sub_tenant_name" {
+  description = "Name of subtenant mapped to tenant org in vCD"
+  type = string
+}

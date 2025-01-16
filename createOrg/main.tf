@@ -7,7 +7,6 @@ resource "vcd_org" "my-org" {
   delete_force     = true
   deployed_vm_quota = 10
   stored_vm_quota = 10
-  #list_of_vdcs = ["my-vdc"]
 
   vapp_lease {
     maximum_runtime_lease_in_sec          = 3600 # 1 hour
@@ -29,34 +28,34 @@ resource "vcd_org" "my-org" {
   lifecycle {
     create_before_destroy = true
   }
-  provisioner "local-exec" {
-    when    = destroy
-    command = "terraform apply -target=vcd_org.my-org -var='org_enabled=false'"
-  }
 }
 
 resource "vcd_org_vdc" "my_vdc" {
   name = var.vdc_name
   org  = vcd_org.my-org.name
-
+  
   depends_on = [vcd_org.my-org]
   
   allocation_model = "AllocationVApp"
   network_pool_name = var.network_pool_name
   provider_vdc_name = var.provider_vdc_name
+  delete_force             = true
+  delete_recursive         = true
 
   compute_capacity {
     cpu {
-      allocated = 10240
-      limit     = 10240
+      allocated = 0
+      limit     = 0
     }
 
     memory {
-      allocated = 10240
-      limit     = 10240
+      allocated = 0
+      limit     = 0
     }
   }
-
+  cpu_speed = 2100
+  memory_guaranteed = 0
+  cpu_guaranteed = 0
   storage_profile {
     name    = var.storage_profile_name
     enabled = true
@@ -64,8 +63,11 @@ resource "vcd_org_vdc" "my_vdc" {
     default = true
   }
 
-  network_quota = 10
-  vm_quota      = 10
+  network_quota = 50
+  vm_quota      = 100
   enabled       = true
+
+  lifecycle {
+    create_before_destroy = true 
+  }
 }
-# Need to check if any outputs need to be added

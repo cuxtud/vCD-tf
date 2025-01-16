@@ -2,8 +2,12 @@ terraform {
   required_providers {
     vcd = {
       source = "vmware/vcd"
-      version = "3.14.0"
+      version = "3.14.1"
     }
+    # nsxt = {
+    #   source = "vmware/nsxt"
+    #   version = "~> 3.0"
+    # }
   }
 }
 
@@ -14,6 +18,11 @@ provider "vcd" {
   password = var.vcd_password
   allow_unverified_ssl = true
   auth_type = "integrated"
-  # vdc = var.vdc_name
-  #api_version = "38.0"
 }
+
+# provider "nsxt" {
+#   host = var.nsxt_host
+#   user = var.nsxt_username
+#   password = var.nsxt_password
+#   allow_unverified_ssl = true
+# }

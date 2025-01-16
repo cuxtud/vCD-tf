@@ -7,8 +7,8 @@ import secrets
 
 class MorpheusTenantManager:
     def __init__(self, morpheus):
-        self.tenant = morpheus['customOptions']['tenant']
-        self.group = morpheus['customOptions']['groupName']
+        self.tenant = morpheus['customOptions']['subTenant']
+        self.group = morpheus['customOptions']['vDC_name']
         self.bearer_token = morpheus['morpheus']['apiAccessToken']
         self.host = morpheus['morpheus']['applianceHost']
         self.morph_headers = {
@@ -138,7 +138,7 @@ class Main:
     def __init__(self, morpheus):
         self.tenant_manager = MorpheusTenantManager(morpheus)
         self.group_manager = GroupManager(morpheus['morpheus']['applianceHost'])
-        self.group_name = morpheus['customOptions']['groupName']
+        self.group_name = morpheus['customOptions']['vCD_org']
         
     def execute(self):
         try:
