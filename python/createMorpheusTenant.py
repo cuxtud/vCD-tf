@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 import json
 import string
 import secrets
+requests.packages.urllib3.disable_warnings()
 
 
 class MorpheusTenantManager:
