@@ -23,7 +23,7 @@ class MorpheusTenantManager:
         """Generate a secure random password"""
         letters = string.ascii_letters
         digits = string.digits
-        special_chars = "!@#$%^&*()_+-=[]{}|"
+        special_chars = "@-_$"
         
         password = [
             secrets.choice(letters.lower()),    
@@ -66,7 +66,7 @@ class MorpheusTenantManager:
                 "firstName": "Test",
                 "lastName": "User",
                 "password": self.user_password,
-                "roles": [{"id": 74}]
+                "roles": [{"id": 6}]
             }
         }
         body = json.dumps(b)
@@ -81,6 +81,7 @@ class MorpheusTenantManager:
             'username': user, 
             'password': self.user_password
         }
+        print(f" Body to get access token for tenant user - {b}")
         body = urlencode(b)
         response = requests.post(url, headers=header, data=body, verify=False)
         data = response.json()
