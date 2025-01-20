@@ -199,7 +199,9 @@ class CloudManager:
     
     def create_cloud(self, access_token, group_id, vcd_host, vdc_id, org_id):
         url = f"https://{self.host}/api/clouds"
+        print (f"Create Cloud API URL: {url}")
         headers = self.get_headers(access_token)
+        print (f"Create Cloud Headers: {headers}")
         b = {
             "zone": {
                 "name": self.zone_name,
@@ -227,8 +229,11 @@ class CloudManager:
             }
         }
         body = json.dumps(b)
+        print (f"Create cloud API Body: {body}")
         response = requests.post(url, headers=headers, data=body, verify=False)
-        if not response.json().get('success', False):
+        data = response.json()
+        print (f"Create Cloud API Response: {data}")
+        if not data['success'] == True:
             raise Exception("Create Cloud Request failed: " + response.text)
         return response.json()
 
