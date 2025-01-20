@@ -7,7 +7,7 @@ import base64
 from morpheuscypher import Cypher
 requests.packages.urllib3.disable_warnings()
 c = Cypher(morpheus=morpheus,ssl_verify=False)
-cypass=str(c.get("secret/winpass"))
+
 
 class MorpheusTenantManager:
     def __init__(self, morpheus):
