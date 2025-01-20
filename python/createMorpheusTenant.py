@@ -198,7 +198,7 @@ class CloudManager:
         }
     
     def create_cloud(self, access_token, group_id, vcd_host, vdc_id, org_id):
-        url = f"https://{self.host}/api/clouds"
+        url = f"https://{self.host}/api/zones"
         print (f"Create Cloud API URL: {url}")
         headers = self.get_headers(access_token)
         print (f"Create Cloud Headers: {headers}")
