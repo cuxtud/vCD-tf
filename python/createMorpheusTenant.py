@@ -254,7 +254,6 @@ class Main:
             access_token = self.tenant_manager.get_access_token(tenant_id)
             self.tenant_manager.create_cypher(self.tenant_manager.bearer_token)
             self.group_manager.delete_existing_groups(access_token)
-            self.group_manager.create_group(access_token, self.group_name)
             group_id = self.group_manager.create_group(access_token, self.group_name)
             vcdtoken = self.vcd_manager.getToken(self.vcd_host)
             vdc_id, org_id = self.vcd_manager.get_vdc_id(self.vcd_host,vcdtoken)
