@@ -144,8 +144,7 @@ class GroupManager:
         return group_data['group']['id']
 
 class VCDManager:
-    def __init__(self, host):
-        self.host = host
+    def __init__(self,morpheus):
         self.user = morpheus['customOptions']['org_name'] + "-admin" + "@" + morpheus['customOptions']['org_name']
         self.user_pass = morpheus['customOptions']['org_admin_password']
     
