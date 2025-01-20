@@ -161,9 +161,9 @@ class VCDManager:
         headers = self.get_headers()
         response = requests.post(url, headers=headers, verify=False)
         response_headers = response.headers
-        print (f"Response headers from the get token method: {response_headers}")
         vcd_token = response_headers['x-vmware-vcloud-access-token']
-        print (f"VCD Token: {vcd_token}")
+        if not vcd_token:
+            print("Failed to fetch vcd token.")
         return vcd_token
     
     def get_vdc_id(self,vcd_host,vcd_token):
@@ -174,8 +174,13 @@ class VCDManager:
             "Authorization": f"Bearer {vcd_token}"
         }
         response = requests.get(url, headers=headers, verify=False)
-        vdc_id = response.get(['values'][0]['id']).split(':')[-1]
-        org_id = response.get(['values'][0]['org']['id'])
+        data = response.json()
+        vdc_id = data['values'][0]['id'].split(':')[-1]
+        if not vdc_id:
+            print("Failed to get vdc id")
+        org_id = data['values'][0]['org']['id']
+        if not org_id:
+            print("Failed to get org id")
         return vdc_id, org_id
 
 class CloudManager:
