@@ -120,7 +120,7 @@ class GroupManager:
         headers = self.get_headers(access_token)
         response = requests.get(url, headers=headers, verify=False)
         data = response.json()
-        print(data['groups'])
+        # print(data['groups'])
 
         for group in data['groups']:
             if 'id' in group:
@@ -160,7 +160,10 @@ class VCDManager:
         url = f"https://{vcd_host}/cloudapi/1.0.0/sessions/"
         headers = self.get_headers()
         response = requests.post(url, headers=headers, verify=False)
-        vcd_token = response.headers.get('x-vmware-vcloud-access-token')
+        response_headers = response.headers
+        print (f"Response headers from the get token method: {response_headers}")
+        vcd_token = response_headers['x-vmware-vcloud-access-token']
+        print (f"VCD Token: {vcd_token}")
         return vcd_token
     
     def get_vdc_id(self,vcd_host,vcd_token):
