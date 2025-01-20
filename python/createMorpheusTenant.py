@@ -141,6 +141,7 @@ class GroupManager:
         body = json.dumps(b)
         response = requests.post(url, headers=headers, data=body, verify=False)
         group_data = response.json()
+        print (f"Create Group Response data: {group_data}")
         return group_data['group']['id']
 
 class VCDManager:
