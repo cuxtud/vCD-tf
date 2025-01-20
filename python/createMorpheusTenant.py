@@ -184,8 +184,11 @@ class VCDManager:
         return vdc_id, org_id
 
 class CloudManager:
-    def __init__(self, host):
-        self.host = host
+    def __init__(self, morpheus):
+        self.host = morpheus['morpheus']['applianceHost']
+        self.zone_name = morpheus['customOptions']['vDC_name']
+        self.zone_user = morpheus['customOptions']['vCD_org'] + "-admin" + "@" + morpheus['customOptions']['vCD_org']
+        self.zone_pass = morpheus['customOptions']['org_admin_password']
         
     def get_headers(self, access_token):
         return {
@@ -199,7 +202,7 @@ class CloudManager:
         headers = self.get_headers(access_token)
         b = {
             "zone": {
-                "name": morpheus['customOptions']['vDC_name'],
+                "name": self.zone_name,
                 "description": None,
                 "groupId": group_id,
                 "zoneType": {
@@ -208,8 +211,8 @@ class CloudManager:
                 "config": {
                     "certificateProvider": "internal",
                     "apiUrl": f"https://{vcd_host}",
-                    "username": morpheus['customOptions']['vCD_org'] + "-admin" + "@" + morpheus['customOptions']['vCD_org'],
-                    "password": morpheus['customOptions']['org_admin_password'],
+                    "username": self.zone_user,
+                    "password": self.zone_pass,
                     "orgId": org_id,
                     "vdcId": vdc_id
                 },
