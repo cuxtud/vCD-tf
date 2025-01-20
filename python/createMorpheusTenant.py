@@ -3,8 +3,10 @@ from urllib.parse import urlencode
 import json
 import string
 import secrets
+import base64
 requests.packages.urllib3.disable_warnings()
-
+c = Cypher(morpheus=morpheus,ssl_verify=False)
+cypass=str(c.get("secret/winpass"))
 
 class MorpheusTenantManager:
     def __init__(self, morpheus):
@@ -88,15 +90,18 @@ class MorpheusTenantManager:
         return data['access_token']
 
     def create_cypher(self, access_token):
-        url = f"https://{self.host}/api/cypher/v1/secret/paas?type=string&ttl=0"
+        url = f"https://{self.host}/api/cypher/v1/secret/testuserpass?type=string&ttl=0"
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization": f"Bearer {access_token}"
         }
         body = json.dumps({"value": self.user_password})  
+        print(f" Body to create cypher with the testuser pass - {body}")
         response = requests.put(url, headers=headers, verify=False)
         return response.json()
+
+    
 
 class GroupManager:
     def __init__(self, host):
@@ -134,23 +139,109 @@ class GroupManager:
         }
         body = json.dumps(b)
         response = requests.post(url, headers=headers, data=body, verify=False)
+        group_data = response.json()
+        return group_data['group']['id']
+
+class VCDManager:
+    def __init__(self, host):
+        self.host = host
+        self.user = morpheus['customOptions']['org_name'] + "-admin" + "@" + morpheus['customOptions']['org_name']
+        self.user_pass = morpheus['customOptions']['org_admin_password']
+    
+    def get_headers(self):
+        return {
+            "Content-Type": "application/json",
+            "Accept": "application/*;version=38.0",
+            "Authorization": f"Basic {base64.b64encode(f'{self.user}:{self.user_pass}'.encode()).decode()}"
+        }
+    
+    def getToken(self, vcd_host):
+        #Get OrgId and Vdc ID from vcloud director using api's
+        url = f"https://{vcd_host}/cloudapi/1.0.0/sessions/"
+        headers = self.get_headers()
+        response = requests.post(url, headers=headers, verify=False)
+        vcd_token = response.headers.get('x-vmware-vcloud-access-token')
+        return vcd_token
+    
+    def get_vdc_id(self,vcd_host,vcd_token):
+        url=f"https://{vcd_host}/cloudapi/1.0.0/vdcs"
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/*;version=38.0",
+            "Authorization": f"Bearer {vcd_token}"
+        }
+        response = requests.get(url, headers=headers, verify=False)
+        vdc_id = response.get(['values'][0]['id']).split(':')[-1]
+        org_id = response.get(['values'][0]['org']['id'])
+        return vdc_id, org_id
+
+class CloudManager:
+    def __init__(self, host):
+        self.host = host
+        
+    def get_headers(self, access_token):
+        return {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": f"Bearer {access_token}"
+        }
+    
+    def create_cloud(self, access_token, group_id, vcd_host, vdc_id, org_id):
+        url = f"https://{self.host}/api/clouds"
+        headers = self.get_headers(access_token)
+        b = {
+            "zone": {
+                "name": morpheus['customOptions']['vDC_name'],
+                "description": None,
+                "groupId": group_id,
+                "zoneType": {
+                    "code": "vcd"
+                },
+                "config": {
+                    "certificateProvider": "internal",
+                    "apiUrl": f"https://{vcd_host}",
+                    "username": morpheus['customOptions']['org_name'] + "-admin" + "@" + morpheus['customOptions']['org_name'],
+                    "password": morpheus['customOptions']['org_admin_password'],
+                    "orgId": org_id,
+                    "vdcId": vdc_id
+                },
+                "code": "anishcode",
+                "labels": [
+                    "anishlabel"
+                ],
+                "location": "NL",
+                "visibility": "private",
+                "enabled": "on",
+                "autoRecoverPowerState": "off"
+            }
+        }
+        body = json.dumps(b)
+        response = requests.post(url, headers=headers, data=body, verify=False)
+        if not response.json().get('success', False):
+            raise Exception("Create Cloud Request failed: " + response.text)
         return response.json()
 
 class Main:
     def __init__(self, morpheus):
         self.tenant_manager = MorpheusTenantManager(morpheus)
         self.group_manager = GroupManager(morpheus['morpheus']['applianceHost'])
+        self.vcd_manager = VCDManager(morpheus)
+        self.cloud_manager = CloudManager(morpheus)
         self.group_name = morpheus['customOptions']['vCD_org']
+        self.vcd_host = str(c.get("secret/vcd_host"))
         
     def execute(self):
         try:
             tenant_id = self.tenant_manager.create_tenant()
             self.tenant_manager.create_subtenant_admin_user(tenant_id)
-            self.tenant_manager.create_cypher(self.tenant_manager.bearer_token)
             access_token = self.tenant_manager.get_access_token(tenant_id)
+            self.tenant_manager.create_cypher(self.tenant_manager.bearer_token)
             self.group_manager.delete_existing_groups(access_token)
             self.group_manager.create_group(access_token, self.group_name)
-            
+            group_id = self.group_manager.create_group(access_token, self.group_name)
+            vcdtoken = self.vcd_manager.getToken(self.vcd_host)
+            vdc_id, org_id = self.vcd_manager.get_vdc_id(self.vcd_host,vcdtoken)
+            self.cloud_manager.create_cloud(access_token, group_id, self.vcd_host, vdc_id, org_id) 
             return True
             
         except Exception as e:
