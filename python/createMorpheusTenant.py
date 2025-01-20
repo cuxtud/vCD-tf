@@ -47,7 +47,7 @@ class MorpheusTenantManager:
             "account": {
                 "name": self.tenant,
                 "description": "Created via API",
-                "role": {"id": 2},
+                "role": {"id": 9},
                 "currency": "EUR"
             }
         }
