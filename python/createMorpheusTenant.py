@@ -145,7 +145,7 @@ class GroupManager:
 
 class VCDManager:
     def __init__(self,morpheus):
-        self.user = morpheus['customOptions']['org_name'] + "-admin" + "@" + morpheus['customOptions']['org_name']
+        self.user = morpheus['customOptions']['vCD_org'] + "-admin" + "@" + morpheus['customOptions']['vCD_org']
         self.user_pass = morpheus['customOptions']['org_admin_password']
     
     def get_headers(self):
@@ -200,7 +200,7 @@ class CloudManager:
                 "config": {
                     "certificateProvider": "internal",
                     "apiUrl": f"https://{vcd_host}",
-                    "username": morpheus['customOptions']['org_name'] + "-admin" + "@" + morpheus['customOptions']['org_name'],
+                    "username": morpheus['customOptions']['vCD_org'] + "-admin" + "@" + morpheus['customOptions']['vCD_org'],
                     "password": morpheus['customOptions']['org_admin_password'],
                     "orgId": org_id,
                     "vdcId": vdc_id
