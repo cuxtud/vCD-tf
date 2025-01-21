@@ -23,7 +23,6 @@ class MorpheusTenantManager:
         self.user_password = self._generate_password()  
 
     def _generate_password(self, length=12):
-        """Generate a secure random password"""
         letters = string.ascii_letters
         digits = string.digits
         special_chars = "@-_$"
@@ -60,8 +59,8 @@ class MorpheusTenantManager:
     def create_subtenant_admin_user(self, tenant_id):
         print("Creating subtenant user")
         url = f"https://{self.host}/api/accounts/{tenant_id}/users"
-        print("Url : " + url)
-        print(f"Generated password: {self.user_password}") 
+        # print("Url : " + url)
+        print(f"Generated password: {self.user_password} for user testuser with in subtenant with id {tenant_id}.") 
         b = {
             "user": {
                 "username": "testuser",
@@ -84,7 +83,7 @@ class MorpheusTenantManager:
             'username': user, 
             'password': self.user_password
         }
-        print(f" Body to get access token for tenant user - {b}")
+        # print(f" Body to get access token for tenant user - {b}")
         body = urlencode(b)
         response = requests.post(url, headers=header, data=body, verify=False)
         data = response.json()
@@ -98,7 +97,7 @@ class MorpheusTenantManager:
             "Authorization": f"Bearer {access_token}"
         }
         body = json.dumps({"value": self.user_password})  
-        print(f" Body to create cypher with the testuser pass - {body}")
+        # print(f" Body to create cypher with the testuser pass - {body}")
         response = requests.put(url, headers=headers, verify=False)
         return response.json()
 
@@ -141,7 +140,11 @@ class GroupManager:
         body = json.dumps(b)
         response = requests.post(url, headers=headers, data=body, verify=False)
         group_data = response.json()
-        print (f"Create Group Response data: {group_data}")
+        # print (f"Create Group Response data: {group_data}")
+        if not group_data['success'] == True:
+            print (f"Failed to create group with name {group_name} in sub-tenant.")
+        else:
+            print (f"Group {group_data['name']} created successfully in sub-tenant.")
         return group_data['group']['id']
 
 class VCDManager:
@@ -200,9 +203,9 @@ class CloudManager:
     
     def create_cloud(self, access_token, group_id, vcd_host, vdc_id, org_id):
         url = f"https://{self.host}/api/zones"
-        print (f"Create Cloud API URL: {url}")
+        # print (f"Create Cloud API URL: {url}")
         headers = self.get_headers(access_token)
-        print (f"Create Cloud Headers: {headers}")
+        # print (f"Create Cloud Headers: {headers}")
         b = {
             "zone": {
                 "name": self.zone_name,
@@ -230,12 +233,14 @@ class CloudManager:
             }
         }
         body = json.dumps(b)
-        print (f"Create cloud API Body: {body}")
+        # print (f"Create cloud API Body: {body}")
         response = requests.post(url, headers=headers, data=body, verify=False)
         data = response.json()
-        print (f"Create Cloud API Response: {data}")
+        # print (f"Create Cloud API Response: {data}")
         if not data['success'] == True:
             raise Exception("Create Cloud Request failed: " + response.text)
+        else:
+            print (f"Cloud {data['zone']['name']} created successfully in sub tenant {data['zone']['owner']['name']}.")
         return response.json()
 
 class Main:
