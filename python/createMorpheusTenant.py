@@ -144,7 +144,7 @@ class GroupManager:
         if not group_data['success'] == True:
             print (f"Failed to create group with name {group_name} in sub-tenant.")
         else:
-            print (f"Group {group_data['name']} created successfully in sub-tenant.")
+            print (f"Group {group_data['group']['name']} created successfully in sub-tenant.")
         return group_data['group']['id']
 
 class VCDManager:
