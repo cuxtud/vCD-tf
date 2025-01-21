@@ -27,6 +27,8 @@ This Terraform configuration creates and manages a VMware Cloud Director (VCD) o
   - Storage profile
   - Network quotas
   - VM quotas
+  - admin user with org admin role
+
 
 ### IP Space (vcd_ip_space)
 - Configured with multiple IP prefixes:
@@ -39,6 +41,10 @@ This Terraform configuration creates and manages a VMware Cloud Director (VCD) o
   - 192.168.0.0/24 - 50 prefixes
   - 172.16.0.0/24 - 250 prefixes
   - 10.0.0.0/24 - 250 prefixes
+
+### T1 Edge Gateway (vcd_nsxt_edgegateway)
+- Name: orgname edge gateway
+- SNAT rule with public ip allocated from public IP space.
 
 ## Usage
 
