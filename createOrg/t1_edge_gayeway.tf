@@ -62,3 +62,14 @@ resource "vcd_nsxt_nat_rule" "snat" {
   depends_on = [ vcd_ip_space_ip_allocation.public_floating_ip ]
 }
 
+# Add default router network to the vcd
+resource "vcd_network_routed_v2" "nsxt-backed" {
+  org         = data.vcd_org.org1.name
+  name        = "Default-Network"
+  description = "Routed Org VDC network backed by NSX-T"
+
+  edge_gateway_id = vcd_nsxt_edgegateway.edge_gateway.id
+
+  gateway            = "10.0.0.1"
+  prefix_length      = 24
+}
