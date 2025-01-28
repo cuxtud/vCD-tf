@@ -80,7 +80,7 @@ class MorpheusTenantManager:
             exit()
         else:
             print(f"Subtenant Admin user: testuser successfully created with password: {self.user_password}.")
-            print(f"API response: {data}")
+            #print(f"API response: {data}")
         return response.json()
 
     def get_access_token(self, tenant_id):
@@ -95,6 +95,11 @@ class MorpheusTenantManager:
         body = urlencode(b)
         response = requests.post(url, headers=header, data=body, verify=False)
         data = response.json()
+        if not data['success'] == True:
+            print(f"Failed to get access token for the subtenant user {user} with api call to url {url} using method post with body {b}.")
+            exit()
+        else:
+            print(f"API token acquired for subtenant admin user.")
         return data['access_token']
 
     def create_cypher(self, access_token):
