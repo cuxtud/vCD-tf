@@ -80,7 +80,7 @@ class MorpheusTenantManager:
             exit()
         else:
             print(f"Subtenant Admin user: testuser successfully created with password: {self.user_password}.")
-
+            print(f"API response: {data}")
         return response.json()
 
     def get_access_token(self, tenant_id):
