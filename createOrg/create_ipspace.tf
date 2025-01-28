@@ -71,9 +71,4 @@ resource "vcd_ip_space" "space1" {
   }
 } 
 
-resource "vcd_ip_space_ip_allocation" "default_ip_prefix" {
-  org_id      = vcd_org.my-org.id
-  ip_space_id = vcd_ip_space.space1.id
-  type        = "IP_PREFIX"
-  value       = "10.0.0.0/24"  # Replace with your desired IP prefix
-}
+
