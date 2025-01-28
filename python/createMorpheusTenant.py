@@ -93,16 +93,18 @@ class MorpheusTenantManager:
         print(f"Get access token for testuser in tenant with id {tenant_id}.")
         header = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
         url = f"https://{self.host}/oauth/token?grant_type=password&scope=write&client_id=morph-api"
+        print(f"URL to get access token: {url}")
         user = f"{tenant_id}\\testuser"
         b = {
             'username': user, 
             'password': self.user_password
         }
-        # print(f" Body to get access token for tenant user - {b}")
+        print(f" Body to get access token for tenant user - {b}")
         body = urlencode(b)
         response = requests.post(url, headers=header, data=body, verify=False)
         data = response.json()
-        if not data['success'] == True:
+        print(f"Debug: API response of access token before If condition: {data}")
+        if not data['access_token']:
             print(f"Failed to get access token for the subtenant user {user} with api call to url {url} using method post with body {b}.")
             print(f"API response for getaccess token for subtenant user {data}")
             exit()
@@ -274,7 +276,6 @@ class Main:
         self.vcd_host = str(c.get("secret/vcd_host"))
         
     def execute(self):
-        try:
             tenant_id = self.tenant_manager.create_tenant()
             self.tenant_manager.create_subtenant_admin_user(tenant_id)
             access_token = self.tenant_manager.get_access_token(tenant_id)
@@ -284,11 +285,6 @@ class Main:
             vcdtoken = self.vcd_manager.getToken(self.vcd_host)
             vdc_id, org_id = self.vcd_manager.get_vdc_id(self.vcd_host,vcdtoken)
             self.cloud_manager.create_cloud(access_token, group_id, self.vcd_host, vdc_id, org_id) 
-            return True
-            
-        except Exception as e:
-            print(f"Error during execution: {str(e)}")
-            return False
 
 if __name__ == "__main__":
     main = Main(morpheus)
