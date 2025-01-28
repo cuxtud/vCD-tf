@@ -93,17 +93,17 @@ class MorpheusTenantManager:
         print(f"Get access token for testuser in tenant with id {tenant_id}.")
         header = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
         url = f"https://{self.host}/oauth/token?grant_type=password&scope=write&client_id=morph-api"
-        print(f"URL to get access token: {url}")
+        # print(f"URL to get access token: {url}")
         user = f"{tenant_id}\\testuser"
         b = {
             'username': user, 
             'password': self.user_password
         }
-        print(f" Body to get access token for tenant user - {b}")
+        # print(f" Body to get access token for tenant user - {b}")
         body = urlencode(b)
         response = requests.post(url, headers=header, data=body, verify=False)
         data = response.json()
-        print(f"Debug: API response of access token before If condition: {data}")
+        # print(f"Debug: API response of access token before If condition: {data}")
         if not data['access_token']:
             print(f"Failed to get access token for the subtenant user {user} with api call to url {url} using method post with body {b}.")
             print(f"API response for getaccess token for subtenant user {data}")
