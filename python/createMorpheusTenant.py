@@ -63,7 +63,7 @@ class MorpheusTenantManager:
         return data['account']['id']
 
     def create_subtenant_admin_user(self, tenant_id):
-        print("Creating subtenant user")
+        print(f"Creating subtenant user in tenant {tenant_id}.")
         url = f"https://{self.host}/api/accounts/{tenant_id}/users"
         # print("Url : " + url)
         print(f"Generated password: {self.user_password} for user testuser with in subtenant with id {tenant_id}.") 
@@ -90,6 +90,7 @@ class MorpheusTenantManager:
         return response.json()
 
     def get_access_token(self, tenant_id):
+        print(f"Get access token for testuser in tenant with id {tenant_id}.")
         header = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
         url = f"https://{self.host}/oauth/token?grant_type=password&scope=write&client_id=morph-api"
         user = f"{tenant_id}\\testuser"
@@ -103,6 +104,7 @@ class MorpheusTenantManager:
         data = response.json()
         if not data['success'] == True:
             print(f"Failed to get access token for the subtenant user {user} with api call to url {url} using method post with body {b}.")
+            print(f"API response for getaccess token for subtenant user {data}")
             exit()
         else:
             print(f"API token acquired for subtenant admin user.")
