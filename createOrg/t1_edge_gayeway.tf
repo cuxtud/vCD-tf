@@ -70,6 +70,6 @@ resource "vcd_network_routed_v2" "nsxt-backed" {
 
   edge_gateway_id = vcd_nsxt_edgegateway.edge_gateway.id
 
-  gateway            = "10.0.0.1"
+  gateway            = "192.168.2.1"
   prefix_length      = 24
 }
