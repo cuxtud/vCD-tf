@@ -54,6 +54,12 @@ class MorpheusTenantManager:
         body = json.dumps(b)
         response = requests.post(url, headers=self.morph_headers, data=body, verify=False)
         data = response.json()
+        if not data['success'] == True:
+            print(f"Failed to create subtenant with url {url} and body {b}.")
+            print(f"API response: {data}")
+            exit()
+        else:
+            print(f"Subtenant {self.tenant} successfully created. Subtenant id {data['account']['id']}.")
         return data['account']['id']
 
     def create_subtenant_admin_user(self, tenant_id):
