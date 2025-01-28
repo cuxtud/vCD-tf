@@ -69,13 +69,15 @@ resource "vcd_ip_space_ip_allocation" "default_ip_prefix" {
   value       = "10.0.0.0/24"  
 }
 #Add default router network to the vcd
-resource "vcd_network_routed_v2" "nsxt-backed" {
+resource "vcd_network_routed_v2" "default-routed-network" {
   org         = data.vcd_org.org1.name
   name        = "Default-Network"
   description = "Routed Org VDC network backed by NSX-T"
 
   edge_gateway_id = vcd_nsxt_edgegateway.edge_gateway.id
 
-  gateway            = "192.168.2.1"
+  gateway            = "10.0.0.1"
   prefix_length      = 24
+
+  depends_on = [ vcd_ip_space_ip_allocation.default_ip_prefix ]
 }
