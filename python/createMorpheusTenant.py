@@ -245,9 +245,9 @@ class CloudManager:
                     "orgId": org_id,
                     "vdcId": vdc_id
                 },
-                "code": "anishcode",
+                "code": self.zone_name,
                 "labels": [
-                    "anishlabel"
+                    morpheus['customOptions']['vCD_org']
                 ],
                 "location": "NL",
                 "visibility": "private",
