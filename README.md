@@ -18,6 +18,8 @@ This Terraform configuration creates and manages a VMware Cloud Director (VCD) o
   - vApp lease settings
   - Account lockout policies
   - Template lease settings
+  - Add Admin user with Org admin role. 
+  - Admin password is an input from the morpheus catalog form.
 
 ### Virtual Data Center (vcd_org_vdc)
 - Name: Accepted as input in the service catalog
@@ -28,6 +30,7 @@ This Terraform configuration creates and manages a VMware Cloud Director (VCD) o
   - Network quotas
   - VM quotas
   - admin user with org admin role
+  - add a default network with allocation of prefix 10.0.0.0/24 with gw 10.0.0.1.
 
 
 ### IP Space (vcd_ip_space)
@@ -41,10 +44,20 @@ This Terraform configuration creates and manages a VMware Cloud Director (VCD) o
   - 192.168.0.0/24 - 50 prefixes
   - 172.16.0.0/24 - 250 prefixes
   - 10.0.0.0/24 - 250 prefixes
+- Allocates all the above prefixes to the new org
 
 ### T1 Edge Gateway (vcd_nsxt_edgegateway)
 - Name: orgname edge gateway
 - SNAT rule with public ip allocated from public IP space.
+
+## Morpheus 
+### Subtenant 
+  - Name: Same name as vCD Org
+  - Account: Same admin user and password as the vCD Admin user
+  - Cleans up any inherited default clouds and groups
+  - Add a group 
+  - Add a cloud of type vcd
+- The above is done via the python script in python directory.
 
 ## Usage
 
@@ -55,9 +68,11 @@ This Terraform configuration creates and manages a VMware Cloud Director (VCD) o
 5. Create a tf profile in the vmware vcenter cloud type
 6. vars with sensitive data and default values to be added to the tf profile
 7. Edit the layout and scope the tf profile which gets added to cypher
-8. Try a test deploy using Instances -> Add.
-9. Create a form with all the inputs to be requested from the user catalog.
-10. Create a catalog of type instance and use the form for input type
-11. Map the morpheus vars to the tf vars input expected from the user
-12. Make sure the catalog is accessible to the correct user role as this would be part of tenant onboarding.
+8. Add a python task with the working path of the python script.
+9. Add a provisioning workflow and add the task in the post provisioning phase
+10. Try a test deploy using Instances -> Add.
+11. Create a form with all the inputs to be requested from the user catalog.
+12. Create a catalog of type instance and use the form for input type
+13. Map the morpheus vars to the tf vars input expected from the user
+14. Make sure the catalog is accessible to the correct user role as this would be part of tenant onboarding.
 
