@@ -68,7 +68,7 @@ class MorpheusTenantManager:
         print(f"Creating subtenant user in tenant {tenant_id}.")
         url = f"https://{self.host}/api/accounts/{tenant_id}/users"
         # print("Url : " + url)
-        print(f"Generated password: {self.user_password} for user testuser with in subtenant with id {tenant_id}.") 
+        # print(f"Generated password: {self.user_password} for user testuser with in subtenant with id {tenant_id}.") 
         b = {
             "user": {
                 "username": self.tenant_user,
@@ -87,7 +87,7 @@ class MorpheusTenantManager:
             print(f"API response: {data}")
             exit()
         else:
-            print(f"Subtenant Admin user: testuser successfully created with password: {self.user_password}.")
+            print(f"Subtenant Admin user: {self.tenant_user} successfully created with password: {self.tenant_pass}.")
             #print(f"API response: {data}")
         return response.json()
 
