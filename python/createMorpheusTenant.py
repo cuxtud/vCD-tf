@@ -92,7 +92,7 @@ class MorpheusTenantManager:
         return response.json()
 
     def get_access_token(self, tenant_id):
-        print(f"Get access token for testuser in tenant with id {tenant_id}.")
+        print(f"Get access token for {self.tenant_user} in tenant with id {tenant_id}.")
         header = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
         url = f"https://{self.host}/oauth/token?grant_type=password&scope=write&client_id=morph-api"
         # print(f"URL to get access token: {url}")
@@ -101,7 +101,7 @@ class MorpheusTenantManager:
             'username': user, 
             'password': self.tenant_pass
         }
-        print(f" Body to get access token for tenant user - {b}")
+        #print(f" Body to get access token for tenant user - {b}")
         body = urlencode(b)
         response = requests.post(url, headers=header, data=body, verify=False)
         data = response.json()
