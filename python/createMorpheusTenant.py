@@ -256,10 +256,10 @@ class CloudManager:
             }
         }
         body = json.dumps(b)
-        # print (f"Create cloud API Body: {body}")
+        print (f"Create cloud API Body: {body}")
         response = requests.post(url, headers=headers, data=body, verify=False)
         data = response.json()
-        # print (f"Create Cloud API Response: {data}")
+        print (f"Create Cloud API Response: {data}")
         if not data['success'] == True:
             raise Exception("Create Cloud Request failed: " + response.text)
         else:
