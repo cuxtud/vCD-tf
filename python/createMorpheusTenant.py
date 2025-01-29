@@ -20,7 +20,9 @@ class MorpheusTenantManager:
             "Accept": "application/json",
             "Authorization": f"Bearer {self.bearer_token}"
         }
-        self.user_password = self._generate_password()  
+        self.user_password = self._generate_password()
+        self.tenant_user = morpheus['customOptions']['vCD_org'] + "-admin"
+        self.tenant_pass = morpheus['customOptions']['org_admin_password']  
 
     def _generate_password(self, length=12):
         letters = string.ascii_letters
@@ -69,11 +71,11 @@ class MorpheusTenantManager:
         print(f"Generated password: {self.user_password} for user testuser with in subtenant with id {tenant_id}.") 
         b = {
             "user": {
-                "username": "testuser",
-                "email": "testuser@morpheusdata.com",
-                "firstName": "Test",
+                "username": self.tenant_user,
+                "email":  self.tenant_user + "@morpheusdata.com",
+                "firstName": "Admin",
                 "lastName": "User",
-                "password": self.user_password,
+                "password": self.tenant_pass,
                 "roles": [{"id": 6}]
             }
         }
@@ -94,10 +96,10 @@ class MorpheusTenantManager:
         header = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
         url = f"https://{self.host}/oauth/token?grant_type=password&scope=write&client_id=morph-api"
         # print(f"URL to get access token: {url}")
-        user = f"{tenant_id}\\testuser"
+        user = f"{tenant_id}\\"+ self.tenant_user
         b = {
             'username': user, 
-            'password': self.user_password
+            'password': self.tenant_pass
         }
         # print(f" Body to get access token for tenant user - {b}")
         body = urlencode(b)
@@ -256,10 +258,10 @@ class CloudManager:
             }
         }
         body = json.dumps(b)
-        print (f"Create cloud API Body: {body}")
+        #print (f"Create cloud API Body: {body}")
         response = requests.post(url, headers=headers, data=body, verify=False)
         data = response.json()
-        print (f"Create Cloud API Response: {data}")
+        #print (f"Create Cloud API Response: {data}")
         if not data['success'] == True:
             raise Exception("Create Cloud Request failed: " + response.text)
         else:
