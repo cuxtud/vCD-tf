@@ -101,7 +101,7 @@ class MorpheusTenantManager:
             'username': user, 
             'password': self.tenant_pass
         }
-        # print(f" Body to get access token for tenant user - {b}")
+        print(f" Body to get access token for tenant user - {b}")
         body = urlencode(b)
         response = requests.post(url, headers=header, data=body, verify=False)
         data = response.json()
