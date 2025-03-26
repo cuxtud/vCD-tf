@@ -9,13 +9,13 @@ resource "vcd_org" "my-org" {
   stored_vm_quota = 10
 
   vapp_lease {
-    maximum_runtime_lease_in_sec          = 3600 # 1 hour
+    maximum_runtime_lease_in_sec          = 3600 
     power_off_on_runtime_lease_expiration = true
-    maximum_storage_lease_in_sec          = 0 # never expires
+    maximum_storage_lease_in_sec          = 0 
     delete_on_storage_lease_expiration    = false
   }
   vapp_template_lease {
-    maximum_storage_lease_in_sec       = 604800 # 1 week
+    maximum_storage_lease_in_sec       = 604800 
     delete_on_storage_lease_expiration = true
   }
   account_lockout {
@@ -24,7 +24,6 @@ resource "vcd_org" "my-org" {
     lockout_interval_minutes      = 60
   }
 
-# Disable the org before destroying it else it fails on destroy.
   lifecycle {
     create_before_destroy = true
   }
